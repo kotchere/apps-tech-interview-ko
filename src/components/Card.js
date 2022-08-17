@@ -8,14 +8,12 @@ const CardRow = ({label, value}) => (
 	</Text>
 );
 
-const Card = ({isDarkMode, title, imdbrating, type, genre, poster}) => {
+const Card = ({isDarkMode, title, imdbrating, type, genre, poster, width}) => {
 	return (
-		<View style={[styles.card, isDarkMode && styles.cardDark]}>
-			<Image source={{uri: poster}} style={styles.cardImage} />
-			<CardRow label="Title" value={title} />
-			<CardRow label="Rating" value={imdbrating} />
-			<CardRow label="Type" value={type} />
-			<CardRow label="Genre" value={genre} />
+		<View style={[styles.container, {width: width}]}>
+			<View style={[styles.card, isDarkMode && styles.cardDark]}>
+				<Image source={{ uri: poster }} style={ styles.cardImage } />
+			</View>
 		</View>
 	)
 }
@@ -23,12 +21,11 @@ const Card = ({isDarkMode, title, imdbrating, type, genre, poster}) => {
 export default Card
 
 const styles = StyleSheet.create({
+	container: {
+		
+	},
 	card: {
-		padding: 16,
-		marginHorizontal: 24,
-		marginBottom: 8,
-		borderColor: Colors.dark,
-		borderWidth: 1,
+		padding: 4,
 		borderRadius: 4,
 		color: Colors.light,
 	},
@@ -38,9 +35,8 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.light,
 	},
 	cardImage: {
-		width: '30%',
+		borderRadius: 4,
 		aspectRatio: 0.666,
-		marginBottom: 10,
 	},
 	cardRow: {
 		color: Colors.dark,

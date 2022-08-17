@@ -6,8 +6,8 @@
 * @flow strict-local
 */
 
-import React, { useEffect, useState } from 'react';
-import type {Node} from 'react';
+import React, { useEffect, useState } from 'react'
+import type {Node} from 'react'
 import {
 	FlatList,
 	SafeAreaView,
@@ -16,16 +16,16 @@ import {
 	Text,
 	useColorScheme,
 	View,
-} from 'react-native';
+} from 'react-native'
 
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import Card from './src/components/Card';
+import { Colors } from 'react-native/Libraries/NewAppScreen'
+import Card from './src/components/Card'
 
-const API_BASE_URL = 'https://cs-title-fetcher.herokuapp.com';
+const API_BASE_URL = 'https://cs-title-fetcher.herokuapp.com'
 		
 const App: () => Node = () => {
-	const isDarkMode = useColorScheme() === 'dark';
-	const [titles, setTitles] = useState([]);
+	const isDarkMode = useColorScheme() === 'dark'
+	const [titles, setTitles] = useState([])
 
 	useEffect(() => {
 		const fetchTitles = () => {
@@ -35,11 +35,27 @@ const App: () => Node = () => {
 			);
 		}
 			
-		fetchTitles().then(({data}) => setTitles(data));
+		fetchTitles()
+		.then(({data}) => {
+			setTitles(data)
+		})
 
-	}, []);
+	}, [])
+
+	const Header = () => {
+		return (
+			<Text
+				style={[
+					styles.sectionTitle,
+					{color: isDarkMode ? Colors.lighter : Colors.darker},
+				]}>
+				Top Titles
+			</Text>
+		)
+	}
 		
 	return (
+		
 		<SafeAreaView
 			style={[
 				styles.container,
@@ -47,17 +63,12 @@ const App: () => Node = () => {
 			]}>
 			<StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
 			<FlatList
-				ListHeaderComponent={
-					<Text
-						style={[
-							styles.sectionTitle,
-							{color: isDarkMode ? Colors.lighter : Colors.darker},
-						]}>
-						Top Titles
-					</Text>
-				}
+				ListHeaderComponent={Header}
+				contentContainerStyle={styles.list}
+				stickyHeaderIndices={[0]}
+				numColumns={3}
 				data={titles}
-				renderItem={({item}) => <Card {...item} isDarkMode={isDarkMode} />}
+				renderItem={({item}) => <Card {...item} width={'33.33%'} isDarkMode={isDarkMode} />}
 				keyExtractor={({id}) => id}
 			/>
 		</SafeAreaView>
@@ -67,6 +78,9 @@ const App: () => Node = () => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+	},
+	list: {
+		margin: 4,
 	},
 	sectionTitle: {
 		fontSize: 24,
