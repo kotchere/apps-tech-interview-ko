@@ -22,24 +22,29 @@ import { Colors } from 'react-native/Libraries/NewAppScreen'
 import Card from './src/components/Card'
 
 const API_BASE_URL = 'https://cs-title-fetcher.herokuapp.com'
+const maxNumTitles = 500
+const limit = 50
 		
 const App: () => Node = () => {
 	const isDarkMode = useColorScheme() === 'dark'
 	const [titles, setTitles] = useState([])
+	const [offset, setOffset] = useState(0)
+
+	const fetchTitles = () => {
+		const nextOffset = offset + limit
+		// don't fetch if offset maximum reached
+		if(nextOffset >= maxNumTitles) return
+
+		fetch(`${API_BASE_URL}/api/titles?offset=${offset}&limit=${limit}`)
+		.then(res => res.json())
+		.then(({data}) => {
+			setTitles(titles.concat(data))
+			setOffset(nextOffset)
+		})
+	}
 
 	useEffect(() => {
-		const fetchTitles = () => {
-			return fetch(`${API_BASE_URL}/api/titles?offset=0&limit=50`)
-			.then(res =>
-				res.json(),
-			);
-		}
-			
 		fetchTitles()
-		.then(({data}) => {
-			setTitles(data)
-		})
-
 	}, [])
 
 	const Header = () => {
@@ -55,7 +60,6 @@ const App: () => Node = () => {
 	}
 		
 	return (
-		
 		<SafeAreaView
 			style={[
 				styles.container,
@@ -66,10 +70,13 @@ const App: () => Node = () => {
 				ListHeaderComponent={Header}
 				contentContainerStyle={styles.list}
 				stickyHeaderIndices={[0]}
+				showsVerticalScrollIndicator={false}
 				numColumns={3}
 				data={titles}
 				renderItem={({item}) => <Card {...item} width={'33.33%'} isDarkMode={isDarkMode} />}
 				keyExtractor={({id}) => id}
+				onEndReached={fetchTitles}
+				onEndReachedThreshold={0.6}
 			/>
 		</SafeAreaView>
 	);

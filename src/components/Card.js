@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const CardRow = ({label, value}) => (
@@ -18,7 +18,7 @@ const Card = ({isDarkMode, title, imdbrating, type, genre, poster, width}) => {
 	)
 }
 
-export default Card
+export default memo(Card)
 
 const styles = StyleSheet.create({
 	container: {
